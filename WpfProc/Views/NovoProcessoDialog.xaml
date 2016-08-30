@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="WpfProc.Views.NovoProcessoDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             Background="White">
+    <Grid Margin="10" Width="320" Height="500">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock FontSize="16" Grid.Row="0" Text="Processo" Grid.ColumnSpan="2" TextWrapping="Wrap" TextAlignment="Center"/>
+            <Label Grid.Row="1" Content="Data" />
+            <DatePicker Grid.Row="1" Margin="0,20,0,0" />
+            <Label Grid.Row="2" Content="Número do processo" Target="{Binding ElementName=Numero}" />
+            <TextBox Grid.Row="2" Name="Numero" Margin="0,20,0,0" />
+            <Label Grid.Row="3" Content="Descrição" Target="{Binding ElementName=Descricao}" />
+            <TextBox Grid.Row="3" Name="Descricao" Margin="0,20,0,0" />
+            <Label Grid.Row="4" Content="Lembrete" />
+            <DatePicker Grid.Row="4" Margin="0,20,0,0" SelectedDateFormat="Long" IsTodayHighlighted="False" />
+            <Label Grid.Row="5" Content="Hora do Lembrete" Target="{Binding ElementName=TempoLembrete}" />
+            <TextBox Grid.Row="5" Name="TempoLembrete" Margin="0,20,0,0" Text="15:00" />
+            <Label Grid.Row="6" Content="Observação" Target="{Binding ElementName=Observacao}" />
+            <TextBox Name="Observacao" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" AcceptsTab="True" Grid.Row="6" Margin="0,20,0,0" />
+        </Grid>
+        <Grid  Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnNao" IsCancel="True" HorizontalAlignment="Center" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Content="Cancelar" Grid.Column="1" Margin="0" VerticalAlignment="Center" Width="100">
+                
+            </Button>
+            <Button x:Name="btnSim" IsDefault="True" HorizontalAlignment="Center"
+            	Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Content="Salvar" Grid.Column="0" Margin="0" VerticalAlignment="Center" Width="100">
+                
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

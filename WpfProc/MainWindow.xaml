@@ -1,0 +1,156 @@
+﻿<Window xml:lang="pt-BR"
+    x:Class="WpfProc.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfProc"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="PROC" Height="350" Width="525" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <Style x:Key="DataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F5F5F5" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="Gray" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="BorderThickness" Value="0,0,0,0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="FontFamily" Value="Calibri" />
+        </Style>
+
+        <CollectionViewSource Source="{Binding Processos}" x:Key="processosView">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Data" />
+                <PropertyGroupDescription PropertyName="Numero" />
+                <PropertyGroupDescription PropertyName="Descricao" />
+                <PropertyGroupDescription PropertyName="Andamento" />
+                <PropertyGroupDescription PropertyName="Lembrete" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="0" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="1" Visibility="{Binding Path=IsReady, Converter={StaticResource BoolToVis}}">
+            <DataGrid Name="DataGridProcesso" AutoGenerateColumns="False" ItemsSource="{Binding  Source={StaticResource processosView}}"  CanUserReorderColumns="False" CanUserSortColumns="True" AlternatingRowBackground="#D1DFE7">
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Padding" Value="0,10,0,10" />
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                    </Style>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Setter Property="BorderBrush" Value="#CCC"/>
+                        <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                        <Setter Property="Cursor" Value="Hand" />
+                        <Setter Property="FontFamily" Value="Segoe" />
+                        <Setter Property="FontSize" Value="14" />
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Data" Width="Auto" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Path=Data,Mode=OneTime}" ToolTip="Data" HorizontalAlignment="Right"></Label>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Número"  Width="Auto" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Path=Numero,Mode=OneTime}" ToolTip="Número"></Label>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Descrição"  Width="*" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Path=Descricao, Mode=OneTime}" ToolTip="Descrição"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Andamento"  Width="Auto" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Path=Andamento.Descricao, Mode=OneTime}" ToolTip="Andamento"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Lembrete"  Width="Auto" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Path=Lembrete, Mode=OneTime}" ToolTip="Lembrete"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+
+        <DockPanel Grid.Row="2" Visibility="{Binding Path=IsReady, Converter={StaticResource BoolToVis}}">
+            <Border BorderBrush="Gray" BorderThickness="0,1,0,0">
+                <StackPanel Orientation="Horizontal" Width="Auto">
+                    <Button  
+                        Content="Concluir" Name="ButtonCheckAll"
+                        Foreground="Black" Background="White" BorderBrush="White" 
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                        Margin="5px" Command="{Binding AprovarTodos}"
+                        ToolTip="Concluir todos os processos selecionados">
+                    </Button>
+                </StackPanel>
+            </Border>
+            <Border BorderBrush="Gray" BorderThickness="0,1,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="Auto">
+                    <Button Content="Adicionar" Background="Green" BorderBrush="Green" Name="ButtonAdicionar"
+                            HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                            Margin="5px" Command="{Binding Adicionar}"
+                            ToolTip="Adicionar um novo processo">
+                    </Button>
+                    <Button Content="Apagar" Background="Red" BorderBrush="Green" Name="ButtonReprovar"
+                            HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                            Margin="5px" Command="{Binding Reprovar}"
+                            ToolTip="Apagar processo">
+                    </Button>
+                </StackPanel>
+            </Border>
+        </DockPanel>
+        <DockPanel>
+            <materialDesign:DialogHost Identifier="NovoProcesso"
+                                Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <materialDesign:DialogHost.DialogContent>
+                    <StackPanel Margin="16">
+                        <TextBlock>Add a new fruit.</TextBlock>
+                        <TextBox Margin="0 8 0 0" HorizontalAlignment="Stretch" x:Name="FruitTextBox" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                        IsDefault="True"
+                                        Margin="0 8 8 0">
+                                ACCEPT
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                        IsCancel="True"
+                                        Margin="0 8 8 0">
+
+                                CANCEL
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:DialogHost.DialogContent>
+            </materialDesign:DialogHost>
+        </DockPanel>
+    </Grid>
+</Window>
