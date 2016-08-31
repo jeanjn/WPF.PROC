@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfProc.ViewModels;
 
 namespace WpfProc.Views
 {
@@ -23,6 +24,7 @@ namespace WpfProc.Views
         public NovoProcessoDialog()
         {
             InitializeComponent();
+            DataContext = new ProcessoDialogViewModel();
         }
     }
 }
