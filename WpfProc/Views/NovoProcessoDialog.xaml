@@ -22,6 +22,7 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <TextBlock FontSize="16" Grid.Row="0" Text="Processo" Grid.ColumnSpan="2" TextWrapping="Wrap" TextAlignment="Center"/>
@@ -31,12 +32,22 @@
             <TextBox Grid.Row="2" Name="Numero" Margin="0,20,0,0" />
             <Label Grid.Row="3" Content="Descrição" Target="{Binding ElementName=Descricao}" />
             <TextBox Grid.Row="3" Name="Descricao" Margin="0,20,0,0" />
-            <Label Grid.Row="4" Content="Lembrete" />
-            <DatePicker Grid.Row="4" Margin="0,20,0,0" SelectedDateFormat="Long" IsTodayHighlighted="False" />
-            <Label Grid.Row="5" Content="Hora do Lembrete" Target="{Binding ElementName=TempoLembrete}" />
-            <TextBox Grid.Row="5" Name="TempoLembrete" Margin="0,20,0,0" Text="15:00" />
-            <Label Grid.Row="6" Content="Observação" Target="{Binding ElementName=Observacao}" />
-            <TextBox Name="Observacao" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" AcceptsTab="True" Grid.Row="6" Margin="0,20,0,0" />
+            <Label Grid.Row="4" Content="Andamento" Target="{Binding ElementName=Andamento}" />
+
+            <ComboBox Grid.Row="4" Margin="0,20,0,0" Name="Andamento" ItemsSource="{Binding Andamentos}" 
+                      SelectedItem="{Binding SelectedAndamento, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Descricao}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Label Grid.Row="5" Content="Lembrete" />
+            <DatePicker Grid.Row="5" Margin="0,20,0,0" SelectedDateFormat="Long" IsTodayHighlighted="False" />
+            <Label Grid.Row="6" Content="Hora do Lembrete" Target="{Binding ElementName=TempoLembrete}" />
+            <TextBox Grid.Row="6" Name="TempoLembrete" Margin="0,20,0,0" Text="15:00" />
+            <Label Grid.Row="7" Content="Observação" Target="{Binding ElementName=Observacao}" />
+            <TextBox Name="Observacao" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" AcceptsTab="True" Grid.Row="7" Margin="0,20,0,0" />
         </Grid>
         <Grid  Grid.Row="1">
             <Grid.ColumnDefinitions>
