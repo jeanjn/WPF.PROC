@@ -1,5 +1,4 @@
-﻿using PROC.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,14 +17,14 @@ using WpfProc.ViewModels;
 namespace WpfProc.Views
 {
     /// <summary>
-    /// Interaction logic for NovoProcessoDialog.xaml
+    /// Interaction logic for AndamentoDialog.xaml
     /// </summary>
-    public partial class NovoProcessoDialog : UserControl
+    public partial class AndamentoDialog : UserControl
     {
-        public NovoProcessoDialog(Processo processo = null)
+        public AndamentoDialog()
         {
             InitializeComponent();
-            DataContext = new ProcessoDialogViewModel(processo);
+            DataContext = new AndamentoDialogViewModel();
         }
     }
 }

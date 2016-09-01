@@ -72,12 +72,9 @@ namespace WpfProc.Helpers
         /// Invokes the method to be called.
         /// </summary>
         /// <param name="parameter">Data used by the command.</param>
-        public void Execute
-          (
-          object parameter
-          )
+        public void Execute(object parameter)
         {
-            ExecuteAction((T)Convert.ChangeType(parameter, typeof(T)));
+            ExecuteAction((T)parameter);
         }
 
         #endregion Public Methods

@@ -43,7 +43,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <Label Grid.Row="5" Content="Lembrete" />
-            <DatePicker Grid.Row="5" Margin="0,20,0,0" SelectedDateFormat="Long" IsTodayHighlighted="False" SelectedDate="{Binding Path=Lembrete, Mode=TwoWay, TargetNullValue={x:Static System:DateTime.Now}}" />
+            <DatePicker Grid.Row="5" Margin="0,20,0,0" IsTodayHighlighted="False" SelectedDate="{Binding Path=Lembrete, Mode=TwoWay, TargetNullValue={x:Static System:DateTime.Now}}" />
             <Label Grid.Row="6" Content="Hora do Lembrete" />
             <TextBox Grid.Row="6" Name="TempoLembrete" Margin="0,20,0,0" Text="{Binding Path=TempoLembrete, Mode=TwoWay}" />
             <Label Grid.Row="7" Content="Observação"/>

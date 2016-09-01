@@ -1,5 +1,4 @@
-﻿using PROC.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,19 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WpfProc.ViewModels;
 
 namespace WpfProc.Views
 {
     /// <summary>
-    /// Interaction logic for NovoProcessoDialog.xaml
+    /// Interaction logic for CreditoDialog.xaml
     /// </summary>
-    public partial class NovoProcessoDialog : UserControl
+    public partial class CreditoDialog : UserControl
     {
-        public NovoProcessoDialog(Processo processo = null)
+        public CreditoDialog()
         {
             InitializeComponent();
-            DataContext = new ProcessoDialogViewModel(processo);
         }
     }
 }

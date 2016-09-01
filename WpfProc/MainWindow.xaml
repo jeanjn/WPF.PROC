@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:WpfProc"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="PROC" Height="350" Width="525" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        Title="PROC" Height="350" Width="800" WindowStartupLocation="CenterScreen" Icon="Resources/run.png">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <Style x:Key="DataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
@@ -20,16 +20,6 @@
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="FontFamily" Value="Calibri" />
         </Style>
-
-        <CollectionViewSource Source="{Binding Processos}" x:Key="processosView">
-            <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription PropertyName="Data" />
-                <PropertyGroupDescription PropertyName="Numero" />
-                <PropertyGroupDescription PropertyName="Descricao" />
-                <PropertyGroupDescription PropertyName="Andamento" />
-                <PropertyGroupDescription PropertyName="Lembrete" />
-            </CollectionViewSource.GroupDescriptions>
-        </CollectionViewSource>
     </Window.Resources>
 
     <Grid>
@@ -41,7 +31,10 @@
         </Grid.RowDefinitions>
 
         <ScrollViewer Grid.Row="1" Visibility="{Binding Path=IsReady, Converter={StaticResource BoolToVis}}">
-            <DataGrid Name="DataGridProcesso" AutoGenerateColumns="False" ItemsSource="{Binding  Source={StaticResource processosView}}"  CanUserReorderColumns="False" CanUserSortColumns="True" AlternatingRowBackground="#D1DFE7">
+            <DataGrid Name="DataGridProcesso" AutoGenerateColumns="False" ItemsSource="{Binding  CollectionView}"  CanUserReorderColumns="False" CanUserSortColumns="True" AlternatingRowBackground="#D1DFE7" IsSynchronizedWithCurrentItem="True">
+                <DataGrid.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ItemDoubleClickCommand}" />
+                </DataGrid.InputBindings>
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Setter Property="Padding" Value="0,10,0,10" />
@@ -54,6 +47,7 @@
                         <Setter Property="Cursor" Value="Hand" />
                         <Setter Property="FontFamily" Value="Segoe" />
                         <Setter Property="FontSize" Value="14" />
+                        <Setter Property="Padding" Value="10,0,10,0" />
                     </Style>
                 </DataGrid.Resources>
 
@@ -97,20 +91,47 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header=""  Width="Auto" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Width="24" Height="24" BorderBrush="Transparent" Margin="10,0,10,0"
+                                        ToolTip="Abrir processo"
+                                        Command="{Binding Path=DataContext.Alterar, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}}" 
+                                        CommandParameter="{Binding}">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="Resources/eye.png"/>
+                                    </Button.Background>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header=""  Width="Auto" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Width="24" Height="24" BorderBrush="Transparent" Margin="10,0,10,0"
+                                        ToolTip="Ao concluir o processo o mesmo não irá mais aparecer na lista"
+                                        Command="{Binding Path=DataContext.Concluir, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}}" 
+                                        CommandParameter="{Binding}">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="Resources/close.png"/>
+                                    </Button.Background>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>
 
-        <DockPanel Grid.Row="2" Visibility="{Binding Path=IsReady, Converter={StaticResource BoolToVis}}">
+        <DockPanel Grid.Row="2">
             <Border BorderBrush="Gray" BorderThickness="0,1,0,0">
-                <StackPanel Orientation="Horizontal" Width="Auto">
-                    <Button  
-                        Content="Concluir" Name="ButtonCheckAll"
-                        Foreground="Black" Background="White" BorderBrush="White" 
-                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                        Margin="5px" Command="{Binding AprovarTodos}"
-                        ToolTip="Concluir todos os processos selecionados">
-                    </Button>
+                <StackPanel Orientation="Horizontal" Width="Auto" HorizontalAlignment="Center">
+                    <TextBlock Foreground="DarkBlue" VerticalAlignment="Center" Margin="10" 
+                        Text="Créditos: Jean Carlos de Almeida" HorizontalAlignment="Center" Cursor="Hand" FontWeight="Bold" TextDecorations="Underline">
+                        <TextBlock.InputBindings>
+                            <MouseBinding Command="{Binding MostrarCreditos}" MouseAction="LeftClick" />
+                        </TextBlock.InputBindings>
+                    </TextBlock>
                 </StackPanel>
             </Border>
             <Border BorderBrush="Gray" BorderThickness="0,1,0,0">
@@ -120,10 +141,12 @@
                             Margin="5px" Command="{Binding Adicionar}"
                             ToolTip="Adicionar um novo processo">
                     </Button>
-                    <Button Content="Apagar" Background="Red" BorderBrush="Green" Name="ButtonReprovar"
-                            HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                            Margin="5px" Command="{Binding Reprovar}"
-                            ToolTip="Apagar processo">
+                    <Button  
+                        Content="Andamentos" Name="ButtonCheckAll"
+                        Foreground="Black" Background="White" BorderBrush="White" 
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                        Margin="5px" Command="{Binding EditarAndamentos}"
+                        ToolTip="Cadastrar ou Alterar Status de Andamento">
                     </Button>
                 </StackPanel>
             </Border>
@@ -135,6 +158,50 @@
                     <StackPanel Margin="16">
                         <TextBlock>Add a new fruit.</TextBlock>
                         <TextBox Margin="0 8 0 0" HorizontalAlignment="Stretch" x:Name="FruitTextBox" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                        IsDefault="True"
+                                        Margin="0 8 8 0">
+                                ACCEPT
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                        IsCancel="True"
+                                        Margin="0 8 8 0">
+
+                                CANCEL
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:DialogHost.DialogContent>
+            </materialDesign:DialogHost>
+            <materialDesign:DialogHost Identifier="AndamentoDialog"
+                                Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <materialDesign:DialogHost.DialogContent>
+                    <StackPanel Margin="16">
+                        <TextBlock>Add a new fruit.</TextBlock>
+                        <TextBox Margin="0 8 0 0" HorizontalAlignment="Stretch"  />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                        IsDefault="True"
+                                        Margin="0 8 8 0">
+                                ACCEPT
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                        IsCancel="True"
+                                        Margin="0 8 8 0">
+
+                                CANCEL
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:DialogHost.DialogContent>
+            </materialDesign:DialogHost>
+            <materialDesign:DialogHost Identifier="CreditoDialog"
+                                Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <materialDesign:DialogHost.DialogContent>
+                    <StackPanel Margin="16">
+                        <TextBlock>Add a new fruit.</TextBlock>
+                        <TextBox Margin="0 8 0 0" HorizontalAlignment="Stretch"  />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
                             <Button Style="{StaticResource MaterialDesignFlatButton}"
                                         IsDefault="True"

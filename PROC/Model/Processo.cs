@@ -9,12 +9,13 @@ namespace PROC.Model
     public class Processo
     {
         public int Id { get; set; }
-        public DateTime Data { get; set; }
+        public DateTime Data { get; set; } = DateTime.Now;
         public string Numero { get; set; }
         public string Descricao { get; set; }
         public string Observacao { get; set; }
         public DateTime? Lembrete { get; set; }
         public int AndamentoId { get; set; }
         public virtual Andamento Andamento { get; set; }
+        public DateTime? DtConclusao { get; set; }
     }
 }

@@ -17,8 +17,6 @@ namespace WpfProc.ViewModels
     {
         private Context _context;
 
-        private Processo _processo;
-
         #region Processo
         public Processo Processo { get; set; }
         public DateTime Data
@@ -82,7 +80,7 @@ namespace WpfProc.ViewModels
                 NotifyPropertyChanged(nameof(Lembrete));
             }
         }
-        public string _tempoLembrete { get; set; }
+        private string _tempoLembrete;
         public string TempoLembrete
         {
             get
@@ -105,6 +103,7 @@ namespace WpfProc.ViewModels
             set
             {
                 Processo.Andamento = value;
+                Processo.AndamentoId = value.Id;
                 NotifyPropertyChanged(nameof(Andamento));
             }
         }
@@ -116,31 +115,29 @@ namespace WpfProc.ViewModels
                 return;
             }
 
-            int hora = 0, minuto = 0;
-            try
-            {
-                
+            //int hora = 0, minuto = 0;
+            //try
+            //{
 
-                var result = string.IsNullOrWhiteSpace(TempoLembrete) ? new string[] { } : TempoLembrete.Split(':');
-                if (result.Length > 1)
-                {
-                    hora = Convert.ToInt32(result[0]);
-                    minuto = Convert.ToInt32(result[1]);
-                }
 
-                var lembrete = Lembrete.Value;
-                Processo.Lembrete = new DateTime(lembrete.Year, lembrete.Month, lembrete.Day, hora, minuto, 0, 0);
-            }
-            catch (Exception)
-            {
-                Lembrete = null;
-                TempoLembrete = null;
-            }
+            //    var result = string.IsNullOrWhiteSpace(TempoLembrete) ? new string[] { } : TempoLembrete.Split(':');
+            //    if (result.Length > 1)
+            //    {
+            //        hora = Convert.ToInt32(result[0]);
+            //        minuto = Convert.ToInt32(result[1]);
+            //    }
+
+            //    var lembrete = Lembrete.Value;
+            //    Processo.Lembrete = new DateTime(lembrete.Year, lembrete.Month, lembrete.Day, hora, minuto, 0, 0);
+            //}
+            //catch (Exception)
+            //{
+            //    Lembrete = null;
+            //    TempoLembrete = null;
+            //}
 
         }
         #endregion
-
-
 
         private ObservableCollection<Andamento> _andamentos;
         public ObservableCollection<Andamento> Andamentos
@@ -162,17 +159,38 @@ namespace WpfProc.ViewModels
         });
 
 
-        public ProcessoDialogViewModel()
+        public ProcessoDialogViewModel(Processo processo = null)
         {
             _context = new Context();
-
             Andamentos = new ObservableCollection<Andamento>(_context.Andamentos);
+            Processo = processo ?? new Processo();
 
-            Processo = new Processo();
+            if(Processo.Andamento == null)
+            {
+                Andamento = Andamentos.FirstOrDefault();
+            }
+            else
+            {
+                Andamento = Andamentos.Single(a => a.Id == Andamento.Id);
+            }
+
+            if(Processo.Lembrete.HasValue)
+            {
+                var hora = Processo.Lembrete.Value.Hour > 9 ? Processo.Lembrete.Value.Hour.ToString() : "0" + Processo.Lembrete.Value.Hour;
+                var minuto = Processo.Lembrete.Value.Minute > 9 ? Processo.Lembrete.Value.Minute.ToString() : "0" + Processo.Lembrete.Value.Minute;
+                _tempoLembrete = $"{hora}:{minuto}";
+            }
         }
 
         private void SalvarProcesso()
         {
+            if (Processo.Id == 0)
+            {
+                _context.Processos.Add(Processo);
+            }
+
+            _context.SaveChanges();
+
             DialogHost.CloseDialogCommand.Execute(null, null);
         }
 
