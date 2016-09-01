@@ -1,4 +1,4 @@
-﻿using PROC.Model;
+﻿using WpfProc.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

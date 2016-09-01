@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PROC.Model
+namespace WpfProc.Model
 {
     public class Andamento
     {

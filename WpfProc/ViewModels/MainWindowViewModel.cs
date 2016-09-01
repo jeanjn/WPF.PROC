@@ -1,6 +1,6 @@
 ﻿using MaterialDesignThemes.Wpf;
-using PROC.DataAccess;
-using PROC.Model;
+using WpfProc.DataAccess;
+using WpfProc.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
